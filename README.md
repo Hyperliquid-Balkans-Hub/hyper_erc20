@@ -1,58 +1,62 @@
 # ERC20 Token Deployer for Hyperliquid
 
-A simple, ready-to-use Hardhat setup for deploying ERC20 tokens on Hyperliquid testnet. Just add your private key and deploy!
+A simple, ready-to-use Hardhat setup for deploying ERC20 tokens on Hyperliquid mainnet. Just add your private key and deploy!
 
-## 🚀 Quick Start
+# 🚀 QUICK START GUIDE
 
-### Prerequisites
+**🔴 IMPORTANT: You need $100+ USDC on HyperCore to deploy ERC20 tokens!**
 
-- Node.js (v18 or later)
-- npm or yarn
-- A wallet with Hyperliquid testnet tokens
-
-### 1. Install Dependencies
-
+## Step 1: Install Dependencies
 ```bash
 npm install
 ```
 
-### 2. Configure Environment
-
-Copy the example environment file and add your private key:
-
+## Step 2: Setup Environment File
 ```bash
 cp env.example .env
 ```
 
-Edit `.env` and add your private key:
-
+Edit `.env` file with your details:
 ```bash
-# Private key for deploying contracts (without 0x prefix)
+# Your wallet private key (without 0x prefix)
 PRIVATE_KEY=your_private_key_here
 
-# Optional: Token configuration
-TOKEN_NAME=MyToken
-TOKEN_SYMBOL=MTK
+# Your token details
+TOKEN_NAME=YourTokenName
+TOKEN_SYMBOL=YTN
 INITIAL_SUPPLY=1000000
 TOKEN_DECIMALS=18
 ```
 
-**⚠️ Important:** Never commit your `.env` file or share your private key!
+## Step 3: Prepare Your Wallet
+1. **Get HYPE tokens** for gas fees from:
+   - https://hybridge.xyz/?refUser=209f2f41 (HyBridge)
+   - https://www.relay.link/bridge/hyperevm (Relay)
 
-### 3. Deploy Your Token
+2. **Deposit $100+ USDC to HyperCore**:
+   - Go to https://app.hyperliquid.xyz/trade
+   - Deposit at least $100 USDC to your account
 
-Deploy to Hyperliquid mainnet:
+## Step 4: Enable Big Blocks
+1. Visit https://hyperevm-block-toggle.vercel.app
+2. Connect your wallet (must have $100+ USDC on HyperCore)
+3. Toggle to "Big Blocks" mode
+4. Wait 2-3 minutes for activation
 
+## Step 5: Deploy Your Token
 ```bash
 npm run deploy
 ```
 
-That's it! Your ERC20 token will be deployed and verified automatically.
+## Step 6: Switch Back to Fast Blocks (Recommended)
+1. Return to https://hyperevm-block-toggle.vercel.app
+2. Toggle back to "Fast Blocks"
 
-**⚠️ Important:** This deploys to Hyperliquid mainnet (Chain ID 999). Make sure you have:
+**🎉 Done! Your ERC20 token is now deployed on Hyperliquid mainnet!**
 
-- Real HYPE tokens for gas fees
-- $100+ USDC on HyperCore for big blocks access
+---
+
+# 📖 DETAILED DOCUMENTATION
 
 ## 🔧 Configuration Options
 
