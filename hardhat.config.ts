@@ -38,21 +38,10 @@ const config: HardhatUserConfig = {
       default: 0,
     },
   },
-  etherscan: {
-    apiKey: {
-      hyperliquid: "placeholder", // Hyperliquid doesn't require API key for verification
-    },
-    customChains: [
-      {
-        network: "hyperliquid",
-        chainId: 999,
-        urls: {
-          apiURL: "https://explorer.hyperliquid.xyz/api",
-          browserURL: "https://explorer.hyperliquid.xyz",
-        },
-      },
-    ],
-  },
+  // etherscan: {
+  //   // Contract verification not available on Hyperliquid
+  //   // Use https://purrsec.com to view transactions and contracts
+  // },
   paths: {
     sources: "./contracts",
     tests: "./test",

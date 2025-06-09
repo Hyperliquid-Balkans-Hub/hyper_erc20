@@ -32,20 +32,20 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
   console.log(`⛽ Gas Used: ${token.receipt?.gasUsed?.toString()}`);
 
   // Verify contract if not on localhost
-  if (hre.network.name !== 'localhost' && hre.network.name !== 'hardhat') {
-    console.log('\n⏳ Waiting for block confirmations...');
-    await new Promise(resolve => setTimeout(resolve, 10000)); // Wait 10 seconds
+  // if (hre.network.name !== 'localhost' && hre.network.name !== 'hardhat') {
+  //   console.log('\n⏳ Waiting for block confirmations...');
+  //   await new Promise(resolve => setTimeout(resolve, 10000)); // Wait 10 seconds
 
-    try {
-      await hre.run('verify:verify', {
-        address: token.address,
-        constructorArguments: [tokenName, tokenSymbol, initialSupply, tokenDecimals],
-      });
-      console.log('✅ Contract verified successfully!');
-    } catch (error) {
-      console.log('❌ Contract verification failed:', error);
-    }
-  }
+  //   try {
+  //     await hre.run('verify:verify', {
+  //       address: token.address,
+  //       constructorArguments: [tokenName, tokenSymbol, initialSupply, tokenDecimals],
+  //     });
+  //     console.log('✅ Contract verified successfully!');
+  //   } catch (error) {
+  //     console.log('❌ Contract verification failed:', error);
+  //   }
+  // }
 };
 
 export default deployToken;

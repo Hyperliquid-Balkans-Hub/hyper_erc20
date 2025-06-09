@@ -59,6 +59,8 @@ npm run deploy
 
 **🎉 Done! Your ERC20 token is now deployed on Hyperliquid mainnet!**
 
+**🔍 View your token:** After deployment, you can view your token and transactions at https://purrsec.com
+
 ---
 
 # 📖 DETAILED DOCUMENTATION
@@ -82,7 +84,7 @@ You can customize your token by setting these environment variables in your `.en
 | `npm run deploy`       | Deploy to Hyperliquid mainnet   |
 | `npm run deploy:local` | Deploy to local hardhat network |
 | `npm run test`         | Run contract tests              |
-| `npm run verify`       | Verify contracts on Hyperliquid |
+| `npm run verify`       | ~~Verify contracts~~ (Not available) |
 | `npm run clean`        | Clean compiled artifacts        |
 | `npm run node`         | Start local Hardhat node        |
 
@@ -119,7 +121,7 @@ The `SimpleERC20` contract includes:
 
 - **RPC URL:** `https://rpc.hyperliquid.xyz/evm`
 - **Chain ID:** 999
-- **Explorer:** https://explorer.hyperliquid.xyz
+- **Explorer:** https://purrsec.com (Only working explorer for Hyperliquid)
 - **Bridge:** Get HYPE tokens from:
   - https://hybridge.xyz/?refUser=209f2f41 (HyBridge)
   - https://www.relay.link/bridge/hyperevm?fromChainId=999&fromCurrency=0x0000000000000000000000000000000000000000&toCurrency=0x0000000000000000000000000000000000000000 (Relay)
@@ -137,7 +139,7 @@ To add Hyperliquid mainnet to MetaMask:
    - **RPC URL:** `https://rpc.hyperliquid.xyz/evm`
    - **Chain ID:** 999
    - **Currency Symbol:** HYPE
-   - **Block Explorer:** `https://explorer.hyperliquid.xyz`
+   - **Explorer:** `https://purrsec.com`
 
 ## 📁 Project Structure
 
@@ -307,11 +309,9 @@ This is the most common error when deploying ERC20 contracts on Hyperliquid.
 
 ## 📄 Contract Verification
 
-Contracts are automatically verified after deployment. You can also manually verify:
+**Contract verification is not currently available on Hyperliquid.**
 
-```bash
-npx hardhat verify --network hyperliquid <CONTRACT_ADDRESS> "TokenName" "SYMBOL" "1000000" "18"
-```
+You can view your deployed contracts and transactions at https://purrsec.com by searching for your contract address.
 
 ## 🎯 Example Deployment Output
 
@@ -327,9 +327,11 @@ Deploying token with the following parameters:
 📍 Contract Address: 0xabcd...efgh
 🔗 Transaction Hash: 0x1234...5678
 ⛽ Gas Used: 1,234,567
+🔍 View Transaction: https://purrsec.com/address/0xabcd...efgh/transactions
 
 ⏳ Waiting for block confirmations...
-✅ Contract verified successfully!
+✅ Contract deployed successfully!
+🔍 View your contract at: https://purrsec.com
 ```
 
 ## 📝 License
