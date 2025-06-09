@@ -30,11 +30,11 @@ TOKEN_DECIMALS=18
 
 ## Step 3: Prepare Your Wallet
 1. **Get HYPE tokens** for gas fees from:
-   - https://hybridge.xyz/?refUser=209f2f41 (HyBridge)
    - https://www.relay.link/bridge/hyperevm (Relay)
+   - https://hybridge.xyz/?refUser=209f2f41 (HyBridge)
 
 2. **Deposit $100+ USDC to HyperCore**:
-   - Go to https://app.hyperliquid.xyz/trade
+   - https://www.relay.link/bridge/hyperevm (Relay)
    - Deposit at least $100 USDC to your account
 
 ## Step 4: Enable Big Blocks
