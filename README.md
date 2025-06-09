@@ -111,7 +111,11 @@ The `SimpleERC20` contract includes:
 - **RPC URL:** `https://rpc.hyperliquid.xyz/evm`
 - **Chain ID:** 999
 - **Explorer:** https://explorer.hyperliquid.xyz
-- **Bridge:** Get HYPE tokens from https://app.debridge.finance/ or https://www.gas.zip/
+- **Bridge:** Get HYPE tokens from:
+  - https://hybridge.xyz/?refUser=209f2f41 (HyBridge)
+  - https://www.relay.link/bridge/hyperevm?fromChainId=999&fromCurrency=0x0000000000000000000000000000000000000000&toCurrency=0x0000000000000000000000000000000000000000 (Relay)
+  - https://app.debridge.finance/ (DeBridge)
+  - https://www.gas.zip/ (Gas.zip)
 
 ### Adding to MetaMask
 
@@ -194,7 +198,11 @@ ERC20 token deployment requires **Big Blocks** due to the higher gas requirement
 
 3. **⛽ Gas Tokens**
    - You still need HYPE tokens for gas fees
-   - Get HYPE from: https://app.debridge.finance/ or https://www.gas.zip/
+   - Get HYPE from:
+     - https://hybridge.xyz/?refUser=209f2f41 (HyBridge)
+     - https://www.relay.link/bridge/hyperevm?fromChainId=999&fromCurrency=0x0000000000000000000000000000000000000000&toCurrency=0x0000000000000000000000000000000000000000 (Relay)
+     - https://app.debridge.finance/ (DeBridge)
+     - https://www.gas.zip/ (Gas.zip)
 
 ### Step-by-Step Big Blocks Setup
 
@@ -245,7 +253,11 @@ Fast blocks (5M gas limit) cannot accommodate these deployments, hence the need 
 **1. "insufficient funds" error**
 
 - Make sure your wallet has enough HYPE tokens for gas
-- Bridge HYPE tokens from: https://app.debridge.finance/ or https://www.gas.zip/
+- Bridge HYPE tokens from:
+  - https://hybridge.xyz/?refUser=209f2f41 (HyBridge)
+  - https://www.relay.link/bridge/hyperevm?fromChainId=999&fromCurrency=0x0000000000000000000000000000000000000000&toCurrency=0x0000000000000000000000000000000000000000 (Relay)
+  - https://app.debridge.finance/ (DeBridge)
+  - https://www.gas.zip/ (Gas.zip)
 
 **2. "nonce too high" error**
 
@@ -318,3 +330,16 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ---
 
 **Ready to deploy your token? Just run `npm run deploy`! 🚀**
+
+---
+
+## 🔴 Support This Project
+
+If this repository helped you deploy your token successfully and you'd like to give back, consider sending a small donation to support continued development:
+
+**🔴 Donation Address (any chain):**
+```
+0xB1620c0547744DeDD30F40a863c09D1964532F8C
+```
+
+**🔴 Every contribution helps maintain and improve this tool for the community! 🙏**
