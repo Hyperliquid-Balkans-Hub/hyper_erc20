@@ -61,6 +61,8 @@ npm run deploy
 
 **🔍 View your token:** After deployment, you can view your token and transactions at https://purrsec.com
 
+**📝 Deployment Record:** A detailed deployment record is automatically saved in the `deployment_history/` folder
+
 ---
 
 # 📖 DETAILED DOCUMENTATION
@@ -149,6 +151,9 @@ erc20/
 │   └── SimpleERC20.sol          # ERC20 token contract
 ├── deploy/
 │   └── 01_deploy_token.ts       # Deployment script
+├── deployment_history/          # Auto-generated deployment records
+│   ├── README.md               # Deployment history guide
+│   └── *.md                    # Individual deployment records
 ├── test/
 │   └── SimpleERC20.test.ts      # Contract tests
 ├── hardhat.config.ts            # Hardhat configuration
@@ -157,6 +162,28 @@ erc20/
 ├── env.example                 # Environment variables example
 └── README.md                   # This file
 ```
+
+## 📝 Deployment History
+
+Every time you deploy a token, a detailed record is automatically created in the `deployment_history/` folder. Each record includes:
+
+- **Token Details**: Name, symbol, supply, decimals
+- **Deployment Info**: Contract address, transaction hash, gas usage
+- **Network Info**: Chain ID, deployer address, timestamp
+- **Direct Links**: Links to view your contract on Purrsec
+- **Notes**: Additional information about the deployment
+
+### Example Deployment Record
+```
+2024-01-15T14-30-25_MTK_0x1234abcd.md
+```
+
+This helps you:
+- 📋 Keep track of all your deployed tokens
+- 🔍 Quickly find contract addresses and transaction hashes
+- 📊 Compare gas costs across different deployments
+- 🔗 Access direct links to view contracts on Purrsec
+- 📤 Share deployment details with others
 
 ## 🧪 Testing
 
@@ -327,7 +354,8 @@ Deploying token with the following parameters:
 📍 Contract Address: 0xabcd...efgh
 🔗 Transaction Hash: 0x1234...5678
 ⛽ Gas Used: 1,234,567
-🔍 View Transaction: https://purrsec.com/address/0xabcd...efgh/transactions
+🔍 View on Purrsec: https://purrsec.com/address/0xabcd...efgh/transactions
+📝 Deployment record saved: deployment_history/2024-01-15T14-30-25_MTK_0xabcdefgh.md
 
 ⏳ Waiting for block confirmations...
 ✅ Contract deployed successfully!

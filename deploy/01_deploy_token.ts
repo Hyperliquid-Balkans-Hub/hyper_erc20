@@ -1,5 +1,7 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts } = hre;
@@ -30,6 +32,61 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
   console.log(`📍 Contract Address: ${token.address}`);
   console.log(`🔗 Transaction Hash: ${token.transactionHash}`);
   console.log(`⛽ Gas Used: ${token.receipt?.gasUsed?.toString()}`);
+  console.log(`🔍 View on Purrsec: https://purrsec.com/address/${token.address}/transactions`);
+
+  // Create deployment history record
+  const deploymentRecord = `# ${tokenName} (${tokenSymbol}) - Deployment Record
+
+## Basic Information
+- **Token Name:** ${tokenName}
+- **Token Symbol:** ${tokenSymbol}
+- **Decimals:** ${tokenDecimals}
+- **Initial Supply:** ${Number(initialSupply).toLocaleString()} ${tokenSymbol}
+
+## Deployment Details
+- **Network:** ${hre.network.name === 'hyperliquid' ? 'Hyperliquid Mainnet (Chain ID: 999)' : hre.network.name}
+- **Contract Address:** \`${token.address}\`
+- **Transaction Hash:** \`${token.transactionHash}\`
+- **Deployer Address:** \`${deployer}\`
+- **Deployment Date:** ${new Date().toISOString().replace('T', ' ').replace(/\.\d{3}Z/, ' UTC')}
+- **Gas Used:** ${token.receipt?.gasUsed?.toString() || 'N/A'}
+- **Gas Price:** 1.0 Gwei (configured in hardhat.config.ts)
+
+## Contract Functions
+- ✅ Standard ERC20 (transfer, approve, etc.)
+- ✅ Mintable (owner only)
+- ✅ Burnable
+- ✅ Ownable
+
+## Links
+- **View on Purrsec:** https://purrsec.com/address/${token.address}/transactions
+- **View Transactions:** https://purrsec.com/address/${token.address}/transactions
+
+## Notes
+- Deployed successfully${hre.network.name === 'hyperliquid' ? ' with Big Blocks enabled' : ''}
+- Owner can mint additional tokens if needed
+- Token holders can burn their own tokens
+- Contract verification is not available on Hyperliquid
+
+---
+*This file was auto-generated on ${new Date().toISOString().replace('T', ' ').replace(/\.\d{3}Z/, ' UTC')}*
+`;
+
+  // Ensure deployment_history directory exists
+  const historyDir = path.join(process.cwd(), 'deployment_history');
+  if (!fs.existsSync(historyDir)) {
+    fs.mkdirSync(historyDir, { recursive: true });
+  }
+
+  // Create filename with timestamp and token info
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+  const filename = `${timestamp}_${tokenSymbol}_${token.address.slice(0, 8)}.md`;
+  const filepath = path.join(historyDir, filename);
+
+  // Write deployment record
+  fs.writeFileSync(filepath, deploymentRecord);
+  
+  console.log(`📝 Deployment record saved: deployment_history/${filename}`);
 
   // Verify contract if not on localhost
   // if (hre.network.name !== 'localhost' && hre.network.name !== 'hardhat') {
