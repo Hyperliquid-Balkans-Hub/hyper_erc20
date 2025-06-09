@@ -1,6 +1,6 @@
-# ERC20 Token Deployer for Hyperliquid
+# ERC20 Token Deployer for Hyperliquid HyperEVM
 
-A simple, ready-to-use Hardhat setup for deploying ERC20 tokens on Hyperliquid mainnet. Just add your private key and deploy!
+A simple, ready-to-use Hardhat setup for deploying ERC20 tokens on **Hyperliquid HyperEVM Mainnet**. Just add your private key and deploy!
 
 # 🚀 QUICK START GUIDE
 
@@ -57,7 +57,7 @@ npm run deploy
 1. Return to https://hyperevm-block-toggle.vercel.app
 2. Toggle back to "Fast Blocks"
 
-**🎉 Done! Your ERC20 token is now deployed on Hyperliquid mainnet!**
+**🎉 Done! Your ERC20 token is now deployed on Hyperliquid HyperEVM Mainnet!**
 
 **🔍 View your token:** After deployment, you can view your token and transactions at https://purrsec.com
 
@@ -119,11 +119,12 @@ The `SimpleERC20` contract includes:
 
 ## 🌐 Network Configuration
 
-### Hyperliquid Mainnet
+### Hyperliquid HyperEVM Mainnet
 
+- **Network Name:** Hyperliquid HyperEVM
 - **RPC URL:** `https://rpc.hyperliquid.xyz/evm`
 - **Chain ID:** 999
-- **Explorer:** https://purrsec.com (Only working explorer for Hyperliquid)
+- **Explorer:** https://purrsec.com (Only working explorer for HyperEVM)
 - **Bridge:** Get HYPE tokens from:
   - https://hybridge.xyz/?refUser=209f2f41 (HyBridge)
   - https://www.relay.link/bridge/hyperevm?fromChainId=999&fromCurrency=0x0000000000000000000000000000000000000000&toCurrency=0x0000000000000000000000000000000000000000 (Relay)
@@ -132,12 +133,12 @@ The `SimpleERC20` contract includes:
 
 ### Adding to MetaMask
 
-To add Hyperliquid mainnet to MetaMask:
+To add Hyperliquid HyperEVM to MetaMask:
 
 1. Open MetaMask
 2. Go to Settings > Networks > Add Network
 3. Enter these details:
-   - **Network Name:** Hyperliquid
+   - **Network Name:** Hyperliquid HyperEVM
    - **RPC URL:** `https://rpc.hyperliquid.xyz/evm`
    - **Chain ID:** 999
    - **Currency Symbol:** HYPE
@@ -212,7 +213,7 @@ The tests cover:
 
 ### What are Big Blocks?
 
-Hyperliquid supports two block modes:
+Hyperliquid HyperEVM supports two block modes:
 
 - **Fast Blocks** (default): ~1.8 second block times, 5M gas limit
 - **Big Blocks**: ~10 second block times, 30M gas limit
@@ -336,7 +337,7 @@ This is the most common error when deploying ERC20 contracts on Hyperliquid.
 
 ## 📄 Contract Verification
 
-**Contract verification is not currently available on Hyperliquid.**
+**Contract verification is not currently available on Hyperliquid HyperEVM.**
 
 You can view your deployed contracts and transactions at https://purrsec.com by searching for your contract address.
 
