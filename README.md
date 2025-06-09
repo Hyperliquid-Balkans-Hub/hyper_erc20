@@ -11,6 +11,11 @@ A simple, ready-to-use Hardhat setup for deploying ERC20 tokens on Hyperliquid m
 npm install
 ```
 
+**If you get dependency conflicts, try:**
+```bash
+npm install --legacy-peer-deps
+```
+
 ## Step 2: Setup Environment File
 ```bash
 cp env.example .env
