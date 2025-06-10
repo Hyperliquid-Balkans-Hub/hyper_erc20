@@ -1,10 +1,10 @@
-# ERC20 Token Deployer for Hyperliquid HyperEVM
+# HyperERC20 Token Deployer for Hyperliquid HyperEVM
 
-A simple, ready-to-use Hardhat setup for deploying ERC20 tokens on **Hyperliquid HyperEVM Mainnet**. Just add your private key and deploy!
+A simple, ready-to-use Hardhat setup for deploying HyperERC20 tokens on **Hyperliquid HyperEVM Mainnet**. Just add your private key and deploy!
 
 # 🚀 QUICK START GUIDE
 
-**🔴 IMPORTANT: You need $100+ USDC on HyperCore to deploy ERC20 tokens!**
+**🔴 IMPORTANT: You need $100+ USDC on HyperCore to deploy HyperERC20 tokens!**
 
 ## Step 1: Install Dependencies
 ```bash
@@ -94,7 +94,7 @@ You can customize your token by setting these environment variables in your `.en
 
 ## 🔍 Contract Features
 
-The `SimpleERC20` contract includes:
+The `HyperERC20` contract includes:
 
 - ✅ Standard ERC20 functionality (transfer, approve, etc.)
 - ✅ Mintable (only by owner)
@@ -170,14 +170,14 @@ To add Hyperliquid HyperEVM to MetaMask:
 ```
 erc20/
 ├── contracts/
-│   └── SimpleERC20.sol          # ERC20 token contract
+│   └── HyperERC20.sol           # ERC20 token contract for HyperEVM
 ├── deploy/
 │   └── 01_deploy_token.ts       # Deployment script
 ├── deployment_history/          # Auto-generated deployment records
 │   ├── README.md               # Deployment history guide
 │   └── *.md                    # Individual deployment records
 ├── test/
-│   └── SimpleERC20.test.ts      # Contract tests
+│   └── HyperERC20.test.ts       # Contract tests
 ├── hardhat.config.ts            # Hardhat configuration
 ├── package.json                 # Dependencies and scripts
 ├── tsconfig.json               # TypeScript configuration

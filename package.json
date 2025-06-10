@@ -1,7 +1,7 @@
 {
-  "name": "erc20-token-deployer",
+  "name": "hypererc20-token-deployer",
   "version": "1.0.0",
-  "description": "Simple ERC20 token deployer for Hyperliquid",
+  "description": "HyperERC20 token deployer for Hyperliquid HyperEVM",
   "main": "index.js",
   "scripts": {
     "compile": "hardhat compile",
@@ -13,9 +13,11 @@
     "clean": "hardhat clean"
   },
   "keywords": [
+    "hypererc20",
     "erc20",
     "token",
     "hyperliquid",
+    "hyperevm",
     "hardhat"
   ],
   "author": "",

@@ -5,10 +5,10 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
- * @title SimpleERC20
- * @dev A simple ERC20 token with basic functionality
+ * @title HyperERC20
+ * @dev An ERC20 token optimized for Hyperliquid HyperEVM
  */
-contract SimpleERC20 is ERC20, Ownable {
+contract HyperERC20 is ERC20, Ownable {
     uint8 private _decimals;
     
     /**

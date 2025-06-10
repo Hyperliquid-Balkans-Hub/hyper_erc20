@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import { ethers } from 'hardhat';
-import { SimpleERC20 } from '../typechain-types';
+import { HyperERC20 } from '../typechain-types';
 
-describe('SimpleERC20', function () {
-  let token: SimpleERC20;
+describe('HyperERC20', function () {
+  let token: HyperERC20;
   let owner: any;
   let addr1: any;
   let addr2: any;
@@ -16,9 +16,12 @@ describe('SimpleERC20', function () {
   beforeEach(async function () {
     [owner, addr1, addr2] = await ethers.getSigners();
 
-    const TokenFactory = await ethers.getContractFactory('SimpleERC20');
-    token = await TokenFactory.deploy(TOKEN_NAME, TOKEN_SYMBOL, INITIAL_SUPPLY, DECIMALS);
+    const TokenFactory = await ethers.getContractFactory('HyperERC20');
+    token = await TokenFactory.deploy(TOKEN_NAME, TOKEN_SYMBOL, DECIMALS);
     await token.waitForDeployment();
+    
+    // Mint initial supply to owner (since constructor no longer mints)
+    await token.mint(owner.address, INITIAL_SUPPLY);
   });
 
   describe('Deployment', function () {

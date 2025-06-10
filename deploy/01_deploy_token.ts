@@ -24,7 +24,7 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
   console.log(`- Initial Mint Amount: ${Number(initialSupply) * mintPercentage / 100}`);
   console.log(`- Deployer: ${deployer}`);
 
-  const token = await deploy('SimpleERC20', {
+  const token = await deploy('HyperERC20', {
     from: deployer,
     args: [tokenName, tokenSymbol, tokenDecimals],
     log: true,
@@ -45,7 +45,7 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
     console.log(`💰 Minting ${mintAmount.toLocaleString()} ${tokenSymbol} tokens to deployer`);
     
     // Get the deployed contract instance
-    const tokenContract = await hre.ethers.getContractAt('SimpleERC20', token.address);
+    const tokenContract = await hre.ethers.getContractAt('HyperERC20', token.address);
     
     // Mint tokens to deployer
     const mintTx = await tokenContract.mint(deployer, mintAmount);
@@ -77,7 +77,7 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
 - **Gas Used:** ${token.receipt?.gasUsed?.toString() || 'N/A'}
 - **Gas Price:** 1.0 Gwei (configured in hardhat.config.ts)
 
-## Contract Functions
+## Contract Functions (HyperERC20)
 - ✅ Standard ERC20 (transfer, approve, etc.)
 - ✅ Mintable (owner only)
 - ✅ Burnable
@@ -133,4 +133,4 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
 };
 
 export default deployToken;
-deployToken.tags = ['SimpleERC20', 'token'];
+deployToken.tags = ['HyperERC20', 'token'];
