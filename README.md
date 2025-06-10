@@ -362,6 +362,45 @@ This is the most common error when deploying ERC20 contracts on Hyperliquid.
 
 You can view your deployed contracts and transactions at https://purrsec.com by searching for your contract address.
 
+## 🔄 Adding Your Token to HyperSwap
+
+After deploying your HyperERC20 token, you can make it tradeable on HyperSwap, the leading DEX on Hyperliquid HyperEVM.
+
+### 📋 Requirements & Token Listing
+
+**⚠️ Important:** HyperSwap has specific requirements for token listings. Before proceeding, make sure to review the listing requirements at:
+
+🔗 **Token List Repository:** https://github.com/HyperSwap-Labs/hyperswap-token-list
+
+### 🏊 Adding Liquidity
+
+Once your token meets the requirements, you can add it to a liquidity pool:
+
+1. **Visit HyperSwap:** https://app.hyperswap.exchange/#/add/HYPE
+2. **Connect your wallet** (the same one used for deployment)
+3. **Select your token** using your contract address
+4. **Add liquidity** by pairing with HYPE or other tokens
+5. **Create the pool** and start trading
+
+### 📝 Submitting to Token List
+
+To get your token officially listed on HyperSwap:
+
+1. **Fork the repository:** https://github.com/HyperSwap-Labs/hyperswap-token-list
+2. **Add your token details** following their format
+3. **Submit a Pull Request** with all required information
+4. **Wait for review** by the HyperSwap team
+
+### 🎯 Benefits of Being Listed
+
+- ✅ **Easier discovery** by traders
+- ✅ **Official token logo** display
+- ✅ **Better integration** with HyperSwap UI
+- ✅ **Increased trading volume** potential
+- ✅ **Enhanced credibility** for your project
+
+**💡 Pro Tip:** Having sufficient liquidity and meeting community standards significantly improves your chances of getting listed!
+
 ## 🎯 Example Deployment Output
 
 ```
