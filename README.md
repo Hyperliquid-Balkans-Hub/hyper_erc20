@@ -31,6 +31,7 @@ TOKEN_NAME=YourTokenName
 TOKEN_SYMBOL=YTN
 INITIAL_SUPPLY=1000000
 TOKEN_DECIMALS=18
+MINT_PERCENTAGE=100
 ```
 
 ## Step 3: Prepare Your Wallet
@@ -75,8 +76,9 @@ You can customize your token by setting these environment variables in your `.en
 | ---------------- | ------------------------------------- | --------- | -------------- |
 | `TOKEN_NAME`     | Full name of your token               | "MyToken" | "Awesome Coin" |
 | `TOKEN_SYMBOL`   | Token symbol/ticker                   | "MTK"     | "AWE"          |
-| `INITIAL_SUPPLY` | Initial token supply (in token units) | "1000000" | "500000"       |
+| `INITIAL_SUPPLY` | Total token supply (in token units)   | "1000000" | "500000"       |
 | `TOKEN_DECIMALS` | Number of decimals                    | "18"      | "6"            |
+| `MINT_PERCENTAGE`| % of supply to mint initially (1-100) | "100"     | "50"           |
 
 ## 📋 Available Commands
 
@@ -99,7 +101,26 @@ The `SimpleERC20` contract includes:
 - ✅ Burnable (by token holders)
 - ✅ Ownable (with OpenZeppelin)
 - ✅ Configurable decimals
+- ✅ Controlled initial minting (configurable percentage)
 - ✅ Built with OpenZeppelin contracts (secure & audited)
+
+## 🪙 Minting Process
+
+The deployment process consists of two steps:
+
+1. **Deploy Contract**: Creates the token contract without minting any tokens
+2. **Initial Mint**: Mints a configurable percentage of the total supply to the deployer
+
+### Minting Configuration
+
+- **`MINT_PERCENTAGE=100`**: Mints 100% of total supply immediately (default)
+- **`MINT_PERCENTAGE=50`**: Mints 50% initially, leaves 50% for future minting
+- **`MINT_PERCENTAGE=0`**: No initial minting, all tokens can be minted later
+
+This gives you full control over token distribution and allows for:
+- **Gradual token release** (mint 10% initially, rest over time)
+- **Community distribution** (mint 0% initially, distribute via airdrops)
+- **Traditional launch** (mint 100% to deployer for immediate distribution)
 
 ### Contract Functions
 

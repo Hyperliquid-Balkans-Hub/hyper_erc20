@@ -13,17 +13,20 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
   const tokenSymbol = process.env.TOKEN_SYMBOL || 'MTK';
   const initialSupply = process.env.INITIAL_SUPPLY || '1000000';
   const tokenDecimals = process.env.TOKEN_DECIMALS || '18';
+  const mintPercentage = parseInt(process.env.MINT_PERCENTAGE || '100');
 
   console.log('Deploying token with the following parameters:');
   console.log(`- Name: ${tokenName}`);
   console.log(`- Symbol: ${tokenSymbol}`);
-  console.log(`- Initial Supply: ${initialSupply}`);
+  console.log(`- Total Supply: ${initialSupply}`);
   console.log(`- Decimals: ${tokenDecimals}`);
+  console.log(`- Mint Percentage: ${mintPercentage}%`);
+  console.log(`- Initial Mint Amount: ${Number(initialSupply) * mintPercentage / 100}`);
   console.log(`- Deployer: ${deployer}`);
 
   const token = await deploy('SimpleERC20', {
     from: deployer,
-    args: [tokenName, tokenSymbol, initialSupply, tokenDecimals],
+    args: [tokenName, tokenSymbol, tokenDecimals],
     log: true,
     waitConfirmations: 1,
   });
@@ -34,6 +37,27 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
   console.log(`⛽ Gas Used: ${token.receipt?.gasUsed?.toString()}`);
   console.log(`🔍 View on Purrsec: https://purrsec.com/address/${token.address}/transactions`);
 
+  // Step 2: Mint initial tokens if percentage > 0
+  if (mintPercentage > 0) {
+    console.log(`\n🪙 Minting ${mintPercentage}% of total supply...`);
+    
+    const mintAmount = Math.floor(Number(initialSupply) * mintPercentage / 100);
+    console.log(`💰 Minting ${mintAmount.toLocaleString()} ${tokenSymbol} tokens to deployer`);
+    
+    // Get the deployed contract instance
+    const tokenContract = await hre.ethers.getContractAt('SimpleERC20', token.address);
+    
+    // Mint tokens to deployer
+    const mintTx = await tokenContract.mint(deployer, mintAmount);
+    await mintTx.wait();
+    
+    console.log(`✅ Successfully minted ${mintAmount.toLocaleString()} ${tokenSymbol} tokens!`);
+    console.log(`🔗 Mint Transaction: ${mintTx.hash}`);
+    console.log(`⛽ Mint Gas Used: ${(await mintTx.wait()).gasUsed?.toString()}`);
+  } else {
+    console.log(`\n⏭️  Skipping initial mint (MINT_PERCENTAGE = 0%)`);
+  }
+
   // Create deployment history record
   const deploymentRecord = `# ${tokenName} (${tokenSymbol}) - Deployment Record
 
@@ -41,7 +65,8 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
 - **Token Name:** ${tokenName}
 - **Token Symbol:** ${tokenSymbol}
 - **Decimals:** ${tokenDecimals}
-- **Initial Supply:** ${Number(initialSupply).toLocaleString()} ${tokenSymbol}
+- **Total Supply:** ${Number(initialSupply).toLocaleString()} ${tokenSymbol}
+- **Initial Mint:** ${mintPercentage}% (${Math.floor(Number(initialSupply) * mintPercentage / 100).toLocaleString()} ${tokenSymbol})
 
 ## Deployment Details
 - **Network:** ${hre.network.name === 'hyperliquid' ? 'Hyperliquid Mainnet (Chain ID: 999)' : hre.network.name}
@@ -64,7 +89,9 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
 
 ## Notes
 - Deployed successfully${hre.network.name === 'hyperliquid' ? ' with Big Blocks enabled' : ''}
-- Owner can mint additional tokens if needed
+- Initial minting: ${mintPercentage}% of total supply minted to deployer
+- ${mintPercentage < 100 ? `Remaining ${100 - mintPercentage}% can be minted later by owner` : 'All tokens minted during deployment'}
+- Owner can mint additional tokens if needed (up to remaining supply)
 - Token holders can burn their own tokens
 - Contract verification is not available on Hyperliquid
 

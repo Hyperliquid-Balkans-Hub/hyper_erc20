@@ -12,20 +12,19 @@ contract SimpleERC20 is ERC20, Ownable {
     uint8 private _decimals;
     
     /**
-     * @dev Constructor that gives msg.sender all of existing tokens.
+     * @dev Constructor that sets up the token without minting.
+     * Initial minting is done separately after deployment for better control.
      * @param name The name of the token
      * @param symbol The symbol of the token
-     * @param initialSupply The initial supply of tokens (in token units, not wei)
      * @param decimals_ The number of decimals for the token
      */
     constructor(
         string memory name,
         string memory symbol,
-        uint256 initialSupply,
         uint8 decimals_
     ) ERC20(name, symbol) Ownable(msg.sender) {
         _decimals = decimals_;
-        _mint(msg.sender, initialSupply * 10**decimals_);
+        // Initial supply is minted after deployment via mint() function
     }
     
     /**
