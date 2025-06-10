@@ -32,6 +32,12 @@ TOKEN_SYMBOL=YTN
 INITIAL_SUPPLY=1000000
 TOKEN_DECIMALS=18
 MINT_PERCENTAGE=100
+
+# Optional: Auto-add liquidity to HyperSwap V2
+ADD_LIQUIDITY=false
+LIQUIDITY_TOKEN_AMOUNT=10000
+LIQUIDITY_HYPE_AMOUNT=1
+LIQUIDITY_SLIPPAGE=5
 ```
 
 ## Step 3: Prepare Your Wallet
@@ -79,6 +85,10 @@ You can customize your token by setting these environment variables in your `.en
 | `INITIAL_SUPPLY` | Total token supply (in token units)   | "1000000" | "500000"       |
 | `TOKEN_DECIMALS` | Number of decimals                    | "18"      | "6"            |
 | `MINT_PERCENTAGE`| % of supply to mint initially (1-100) | "100"     | "50"           |
+| `ADD_LIQUIDITY`  | Add liquidity to HyperSwap V2         | "false"   | "true"         |
+| `LIQUIDITY_TOKEN_AMOUNT` | Token amount for liquidity   | "10000"   | "5000"         |
+| `LIQUIDITY_HYPE_AMOUNT` | HYPE amount for liquidity     | "1"       | "0.5"          |
+| `LIQUIDITY_SLIPPAGE` | Slippage tolerance (1-50)        | "5"       | "10"           |
 
 ## 📋 Available Commands
 
@@ -121,6 +131,44 @@ This gives you full control over token distribution and allows for:
 - **Gradual token release** (mint 10% initially, rest over time)
 - **Community distribution** (mint 0% initially, distribute via airdrops)
 - **Traditional launch** (mint 100% to deployer for immediate distribution)
+
+## 🏊 Automated Liquidity Addition
+
+For convenience, the deployment script can automatically add initial liquidity to HyperSwap V2 after token deployment.
+
+### 🔧 Configuration
+
+Set `ADD_LIQUIDITY=true` in your `.env` file to enable automated liquidity addition:
+
+```bash
+ADD_LIQUIDITY=true
+LIQUIDITY_TOKEN_AMOUNT=10000    # Amount of your token to add
+LIQUIDITY_HYPE_AMOUNT=1         # Amount of HYPE to pair with
+LIQUIDITY_SLIPPAGE=5            # Slippage tolerance (1-50%)
+```
+
+### 📋 Requirements
+
+- **Sufficient HYPE balance** for liquidity and gas fees
+- **Sufficient token balance** (minted during deployment)
+- **Big Blocks enabled** (for higher gas limits)
+
+### 🚀 Process
+
+When enabled, the deployment script will:
+
+1. **Deploy your token contract**
+2. **Mint specified percentage** to deployer
+3. **Approve tokens** for HyperSwap Router
+4. **Add liquidity** to create HYPE/YourToken pool
+5. **Provide trading links** for immediate access
+
+### ⚠️ Important Notes
+
+- **Test with small amounts first** on a test deployment
+- **Liquidity addition is optional** - set `ADD_LIQUIDITY=false` to skip
+- **Manual backup available** - if automated addition fails, you get manual links
+- **Slippage protection** - transactions will revert if price moves too much
 
 ### Contract Functions
 
@@ -169,10 +217,12 @@ To add Hyperliquid HyperEVM to MetaMask:
 
 ```
 erc20/
+├── abi/
+│   └── router_abi.json          # HyperSwap V2 Router ABI
 ├── contracts/
 │   └── HyperERC20.sol           # ERC20 token contract for HyperEVM
 ├── deploy/
-│   └── 01_deploy_token.ts       # Deployment script
+│   └── 01_deploy_token.ts       # Deployment script with liquidity
 ├── deployment_history/          # Auto-generated deployment records
 │   ├── README.md               # Deployment history guide
 │   └── *.md                    # Individual deployment records
@@ -416,6 +466,17 @@ Deploying token with the following parameters:
 🔗 Transaction Hash: 0x1234...5678
 ⛽ Gas Used: 1,234,567
 🔍 View on Purrsec: https://purrsec.com/address/0xabcd...efgh/transactions
+
+🪙 Minting 100% of total supply...
+💰 Minting 1,000,000 MTK tokens to deployer
+✅ Successfully minted 1,000,000 MTK tokens!
+
+🏊 Adding liquidity to HyperSwap V2...
+💰 Token Amount: 10000 MTK
+💰 HYPE Amount: 1 HYPE
+✅ Liquidity added successfully!
+🏊 View Pool: https://app.hyperswap.exchange/#/pool
+
 📝 Deployment record saved: deployment_history/2024-01-15T14-30-25_MTK_0xabcdefgh.md
 
 ⏳ Waiting for block confirmations...

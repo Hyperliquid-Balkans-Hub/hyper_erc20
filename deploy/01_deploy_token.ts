@@ -14,6 +14,12 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
   const initialSupply = process.env.INITIAL_SUPPLY || '1000000';
   const tokenDecimals = process.env.TOKEN_DECIMALS || '18';
   const mintPercentage = parseInt(process.env.MINT_PERCENTAGE || '100');
+  
+  // Liquidity configuration
+  const addLiquidity = process.env.ADD_LIQUIDITY === 'true';
+  const liquidityTokenAmount = process.env.LIQUIDITY_TOKEN_AMOUNT || '10000';
+  const liquidityHypeAmount = process.env.LIQUIDITY_HYPE_AMOUNT || '1';
+  const liquiditySlippage = parseInt(process.env.LIQUIDITY_SLIPPAGE || '5');
 
   console.log('Deploying token with the following parameters:');
   console.log(`- Name: ${tokenName}`);
@@ -22,6 +28,12 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
   console.log(`- Decimals: ${tokenDecimals}`);
   console.log(`- Mint Percentage: ${mintPercentage}%`);
   console.log(`- Initial Mint Amount: ${Number(initialSupply) * mintPercentage / 100}`);
+  console.log(`- Add Liquidity: ${addLiquidity ? 'Yes' : 'No'}`);
+  if (addLiquidity) {
+    console.log(`- Liquidity Token Amount: ${liquidityTokenAmount}`);
+    console.log(`- Liquidity HYPE Amount: ${liquidityHypeAmount}`);
+    console.log(`- Slippage Tolerance: ${liquiditySlippage}%`);
+  }
   console.log(`- Deployer: ${deployer}`);
 
   const token = await deploy('HyperERC20', {
@@ -58,6 +70,82 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
     console.log(`\n⏭️  Skipping initial mint (MINT_PERCENTAGE = 0%)`);
   }
 
+  // Step 3: Add Liquidity to HyperSwap V2 (if enabled)
+  if (addLiquidity) {
+    console.log(`\n🏊 Adding liquidity to HyperSwap V2...`);
+    
+    try {
+      // HyperSwap V2 Router address
+      const ROUTER_ADDRESS = "0xD19222370B1944a5392f98028C3E70AFD3a673dF";
+      
+      // Load router ABI
+      const routerABI = require('../abi/router_abi.json');
+      
+      // Get router contract
+      const routerContract = await hre.ethers.getContractAt(routerABI.abi, ROUTER_ADDRESS);
+      const signer = await hre.ethers.getSigner(deployer);
+      const router = routerContract.connect(signer) as any;
+      
+      // Get WETH address from router
+      const WETH_ADDRESS = await router.WETH() as string;
+      console.log(`📍 WETH Address: ${WETH_ADDRESS}`);
+      
+      // Calculate amounts
+      const tokenAmountDesired = hre.ethers.parseUnits(liquidityTokenAmount, tokenDecimals);
+      const hyipeAmountDesired = hre.ethers.parseEther(liquidityHypeAmount);
+      
+      // Calculate minimum amounts with slippage
+      const tokenAmountMin = tokenAmountDesired * BigInt(100 - liquiditySlippage) / BigInt(100);
+      const hypeAmountMin = hyipeAmountDesired * BigInt(100 - liquiditySlippage) / BigInt(100);
+      
+      console.log(`💰 Token Amount: ${liquidityTokenAmount} ${tokenSymbol}`);
+      console.log(`💰 HYPE Amount: ${liquidityHypeAmount} HYPE`);
+      console.log(`📉 Slippage: ${liquiditySlippage}%`);
+      
+      // Approve token for router
+      const tokenContract = await hre.ethers.getContractAt('HyperERC20', token.address);
+      const tokenWithSigner = tokenContract.connect(signer) as any;
+      
+      console.log(`\n✅ Approving ${liquidityTokenAmount} ${tokenSymbol} for router...`);
+      const approveTx = await tokenWithSigner.approve(ROUTER_ADDRESS, tokenAmountDesired);
+      await approveTx.wait();
+      console.log(`✅ Token approved successfully!`);
+      
+      // Add liquidity
+      const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 minutes from now
+      
+      console.log(`\n🏊 Adding liquidity to pool...`);
+      const liquidityTx = await router.addLiquidityETH(
+        token.address,
+        tokenAmountDesired,
+        tokenAmountMin,
+        hypeAmountMin,
+        deployer,
+        deadline,
+        { 
+          value: hyipeAmountDesired,
+          gasLimit: 500000 // Conservative gas limit
+        }
+      );
+      
+      const liquidityReceipt = await liquidityTx.wait();
+      
+      console.log(`✅ Liquidity added successfully!`);
+      console.log(`🔗 Liquidity Transaction: ${liquidityTx.hash}`);
+      console.log(`⛽ Liquidity Gas Used: ${liquidityReceipt.gasUsed?.toString()}`);
+      console.log(`🔍 View on Purrsec: https://purrsec.com/address/${ROUTER_ADDRESS}/transactions`);
+      console.log(`🏊 View Pool: https://app.hyperswap.exchange/#/pool`);
+      
+    } catch (error: any) {
+      console.error(`❌ Failed to add liquidity:`, error.message || error);
+      console.log(`⚠️  Deployment completed but liquidity addition failed.`);
+      console.log(`💡 You can manually add liquidity at: https://app.hyperswap.exchange/#/add/${token.address}`);
+    }
+  } else {
+    console.log(`\n⏭️  Skipping liquidity addition (ADD_LIQUIDITY = false)`);
+    console.log(`💡 To add liquidity manually: https://app.hyperswap.exchange/#/add/${token.address}`);
+  }
+
   // Create deployment history record
   const deploymentRecord = `# ${tokenName} (${tokenSymbol}) - Deployment Record
 
@@ -67,6 +155,7 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
 - **Decimals:** ${tokenDecimals}
 - **Total Supply:** ${Number(initialSupply).toLocaleString()} ${tokenSymbol}
 - **Initial Mint:** ${mintPercentage}% (${Math.floor(Number(initialSupply) * mintPercentage / 100).toLocaleString()} ${tokenSymbol})
+- **Liquidity Added:** ${addLiquidity ? 'Yes' : 'No'}${addLiquidity ? ` (${liquidityTokenAmount} ${tokenSymbol} + ${liquidityHypeAmount} HYPE)` : ''}
 
 ## Deployment Details
 - **Network:** ${hre.network.name === 'hyperliquid' ? 'Hyperliquid Mainnet (Chain ID: 999)' : hre.network.name}
@@ -85,7 +174,10 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
 
 ## Links
 - **View on Purrsec:** https://purrsec.com/address/${token.address}/transactions
-- **View Transactions:** https://purrsec.com/address/${token.address}/transactions
+- **View Transactions:** https://purrsec.com/address/${token.address}/transactions${addLiquidity ? `
+- **HyperSwap Pool:** https://app.hyperswap.exchange/#/pool
+- **Add More Liquidity:** https://app.hyperswap.exchange/#/add/${token.address}` : `
+- **Add Liquidity:** https://app.hyperswap.exchange/#/add/${token.address}`}
 
 ## Notes
 - Deployed successfully${hre.network.name === 'hyperliquid' ? ' with Big Blocks enabled' : ''}
