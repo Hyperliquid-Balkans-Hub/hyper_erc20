@@ -96,8 +96,8 @@ You can customize your token by setting these environment variables in your `.en
 | `npm run deploy`       | Deploy to Hyperliquid mainnet   |
 | `npm run deploy:local` | Deploy to local hardhat network |
 | `npm run test`         | Run contract tests              |
-| `npm run verify`       | Verify contracts with Sourcify  |
-| `npm run verify:script`| Verify using custom script      |
+| `npm run verify`       | Verify using custom script (auto-reads deployment) |
+| `npm run verify:hardhat`| Verify using Hardhat built-in (may have API issues) |
 | `npm run clean`        | Clean compiled artifacts        |
 | `npm run node`         | Start local Hardhat node        |
 
@@ -416,8 +416,8 @@ This is the most common error when deploying ERC20 contracts on Hyperliquid.
 After deploying your contract, verify it using:
 
 ```bash
-# Using the verification script (easiest)
-npm run verify:script
+# Using the verification script (easiest - auto-reads latest deployment)
+npm run verify
 
 # Or manually with contract address and constructor args
 npx hardhat verify --network hyperliquid 0xYourContractAddress "TokenName" "SYMBOL" "18"
@@ -437,7 +437,7 @@ TOKEN_DECIMALS=18
 
 Then run:
 ```bash
-npm run verify:script
+npm run verify
 ```
 
 #### Method 3: CLI Verification

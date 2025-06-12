@@ -11,9 +11,11 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
   // Get token configuration from environment variables or use defaults
   const tokenName = process.env.TOKEN_NAME || 'MyToken';
   const tokenSymbol = process.env.TOKEN_SYMBOL || 'MTK';
-  const initialSupply = process.env.INITIAL_SUPPLY || '1000000';
   const tokenDecimals = process.env.TOKEN_DECIMALS || '18';
   const mintPercentage = parseInt(process.env.MINT_PERCENTAGE || '100');
+  
+  // For HyperERC20, we don't set initial supply in constructor - it's managed through minting
+  const totalSupply = process.env.TOTAL_SUPPLY || '1000000'; // Used for display and minting calculations
   
   // Liquidity configuration
   const addLiquidity = process.env.ADD_LIQUIDITY === 'true';
@@ -24,10 +26,10 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
   console.log('Deploying token with the following parameters:');
   console.log(`- Name: ${tokenName}`);
   console.log(`- Symbol: ${tokenSymbol}`);
-  console.log(`- Total Supply: ${initialSupply}`);
+  console.log(`- Total Supply: ${totalSupply}`);
   console.log(`- Decimals: ${tokenDecimals}`);
   console.log(`- Mint Percentage: ${mintPercentage}%`);
-  console.log(`- Initial Mint Amount: ${Number(initialSupply) * mintPercentage / 100}`);
+  console.log(`- Initial Mint Amount: ${Number(totalSupply) * mintPercentage / 100}`);
   console.log(`- Add Liquidity: ${addLiquidity ? 'Yes' : 'No'}`);
   if (addLiquidity) {
     console.log(`- Liquidity Token Amount: ${liquidityTokenAmount}`);
@@ -53,7 +55,7 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
   if (mintPercentage > 0) {
     console.log(`\n🪙 Minting ${mintPercentage}% of total supply...`);
     
-    const mintAmount = Math.floor(Number(initialSupply) * mintPercentage / 100);
+    const mintAmount = Math.floor(Number(totalSupply) * mintPercentage / 100);
     console.log(`💰 Minting ${mintAmount.toLocaleString()} ${tokenSymbol} tokens to deployer`);
     
     // Get the deployed contract instance
@@ -153,8 +155,8 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
 - **Token Name:** ${tokenName}
 - **Token Symbol:** ${tokenSymbol}
 - **Decimals:** ${tokenDecimals}
-- **Total Supply:** ${Number(initialSupply).toLocaleString()} ${tokenSymbol}
-- **Initial Mint:** ${mintPercentage}% (${Math.floor(Number(initialSupply) * mintPercentage / 100).toLocaleString()} ${tokenSymbol})
+- **Total Supply:** ${Number(totalSupply).toLocaleString()} ${tokenSymbol}
+- **Initial Mint:** ${mintPercentage}% (${Math.floor(Number(totalSupply) * mintPercentage / 100).toLocaleString()} ${tokenSymbol})
 - **Liquidity Added:** ${addLiquidity ? 'Yes' : 'No'}${addLiquidity ? ` (${liquidityTokenAmount} ${tokenSymbol} + ${liquidityHypeAmount} HYPE)` : ''}
 
 ## Deployment Details
@@ -185,7 +187,7 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
 - ${mintPercentage < 100 ? `Remaining ${100 - mintPercentage}% can be minted later by owner` : 'All tokens minted during deployment'}
 - Owner can mint additional tokens if needed (up to remaining supply)
 - Token holders can burn their own tokens
-- Contract verification is not available on Hyperliquid
+- Contract verification available via Sourcify at https://sourcify.parsec.finance
 
 ---
 *This file was auto-generated on ${new Date().toISOString().replace('T', ' ').replace(/\.\d{3}Z/, ' UTC')}*
@@ -208,20 +210,23 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
   console.log(`📝 Deployment record saved: deployment_history/${filename}`);
 
   // Verify contract if not on localhost
-  // if (hre.network.name !== 'localhost' && hre.network.name !== 'hardhat') {
-  //   console.log('\n⏳ Waiting for block confirmations...');
-  //   await new Promise(resolve => setTimeout(resolve, 10000)); // Wait 10 seconds
+  if (hre.network.name !== 'localhost' && hre.network.name !== 'hardhat') {
+    console.log('\n⏳ Waiting for block confirmations...');
+    await new Promise(resolve => setTimeout(resolve, 10000)); // Wait 10 seconds
 
-  //   try {
-  //     await hre.run('verify:verify', {
-  //       address: token.address,
-  //       constructorArguments: [tokenName, tokenSymbol, initialSupply, tokenDecimals],
-  //     });
-  //     console.log('✅ Contract verified successfully!');
-  //   } catch (error) {
-  //     console.log('❌ Contract verification failed:', error);
-  //   }
-  // }
+    try {
+      console.log('🔍 Attempting contract verification...');
+      await hre.run('verify:verify', {
+        address: token.address,
+        constructorArguments: [tokenName, tokenSymbol, tokenDecimals], // HyperERC20 constructor: name, symbol, decimals
+      });
+      console.log('✅ Contract verified successfully!');
+      console.log(`🔍 View verified contract: https://sourcify.parsec.finance/#/lookup/${token.address}`);
+    } catch (error: any) {
+      console.log('❌ Contract verification failed:', error.message || error);
+      console.log('💡 You can verify manually later using: npm run verify:sourcify');
+    }
+  }
 };
 
 export default deployToken;
