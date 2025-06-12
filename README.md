@@ -29,7 +29,6 @@ PRIVATE_KEY=your_private_key_here
 # Your token details
 TOKEN_NAME=YourTokenName
 TOKEN_SYMBOL=YTN
-INITIAL_SUPPLY=1000000
 TOKEN_DECIMALS=18
 MINT_PERCENTAGE=100
 
@@ -82,7 +81,6 @@ You can customize your token by setting these environment variables in your `.en
 | ---------------- | ------------------------------------- | --------- | -------------- |
 | `TOKEN_NAME`     | Full name of your token               | "MyToken" | "Awesome Coin" |
 | `TOKEN_SYMBOL`   | Token symbol/ticker                   | "MTK"     | "AWE"          |
-| `INITIAL_SUPPLY` | Total token supply (in token units)   | "1000000" | "500000"       |
 | `TOKEN_DECIMALS` | Number of decimals                    | "18"      | "6"            |
 | `MINT_PERCENTAGE`| % of supply to mint initially (1-100) | "100"     | "50"           |
 | `ADD_LIQUIDITY`  | Add liquidity to HyperSwap V2         | "false"   | "true"         |
@@ -98,7 +96,8 @@ You can customize your token by setting these environment variables in your `.en
 | `npm run deploy`       | Deploy to Hyperliquid mainnet   |
 | `npm run deploy:local` | Deploy to local hardhat network |
 | `npm run test`         | Run contract tests              |
-| `npm run verify`       | ~~Verify contracts~~ (Not available) |
+| `npm run verify`       | Verify contracts with Sourcify  |
+| `npm run verify:script`| Verify using custom script      |
 | `npm run clean`        | Clean compiled artifacts        |
 | `npm run node`         | Start local Hardhat node        |
 
@@ -408,9 +407,79 @@ This is the most common error when deploying ERC20 contracts on Hyperliquid.
 
 ## 📄 Contract Verification
 
-**Contract verification is not currently available on Hyperliquid HyperEVM.**
+**Great news!** Contract verification is now available on Hyperliquid HyperEVM using **Sourcify** through Parsec!
 
-You can view your deployed contracts and transactions at https://purrsec.com by searching for your contract address.
+### 🔍 Verification Methods
+
+#### Method 1: Using Hardhat (Recommended)
+
+After deploying your contract, verify it using:
+
+```bash
+# Using the verification script (easiest)
+npm run verify:script
+
+# Or manually with contract address and constructor args
+npx hardhat verify --network hyperliquid 0xYourContractAddress "TokenName" "SYMBOL" "18"
+```
+
+#### Method 2: Using Environment Variables
+
+Set your contract details in `.env`:
+
+```bash
+CONTRACT_ADDRESS=0xYourContractAddress
+CONTRACT_NAME=HyperERC20
+TOKEN_NAME=YourTokenName
+TOKEN_SYMBOL=YTN
+TOKEN_DECIMALS=18
+```
+
+Then run:
+```bash
+npm run verify:script
+```
+
+#### Method 3: CLI Verification
+
+You can also verify using the Foundry CLI if you have it installed:
+
+```bash
+forge verify-contract 0xYourContractAddress contracts/HyperERC20.sol:HyperERC20 \
+  --chain-id 999 \
+  --verifier sourcify \
+  --verifier-url https://sourcify.parsec.finance/verify \
+  --constructor-args $(cast abi-encode "constructor(string,string,uint8)" "TokenName" "SYMBOL" 18)
+```
+
+### 📋 Verification Benefits
+
+- ✅ **Source Code Visibility**: View your contract source code publicly
+- ✅ **Enhanced Trust**: Users can verify contract functionality
+- ✅ **Better Integration**: Improved support with tools and explorers
+- ✅ **Debugging**: Easier to debug transactions and contract interactions
+
+### 🔗 Verification Links
+
+- **Sourcify Interface**: https://sourcify.parsec.finance
+- **Lookup Verified Contracts**: https://sourcify.parsec.finance/#/lookup/YOUR_CONTRACT_ADDRESS
+- **View Transactions**: https://purrsec.com/address/YOUR_CONTRACT_ADDRESS/transactions
+
+### 🐛 Troubleshooting Verification
+
+If verification fails, try these steps:
+
+1. **Check Constructor Arguments**: Ensure they match exactly what was used during deployment
+2. **Verify Contract Name**: Make sure you're using the correct contract name (e.g., `HyperERC20`)
+3. **Compiler Version**: Ensure you're using Solidity 0.8.24 (set in hardhat.config.ts)
+4. **Run from Root**: Execute verification commands from the project root directory
+5. **Check Network**: Ensure you're connected to Hyperliquid HyperEVM (Chain ID: 999)
+
+**Example successful verification:**
+```bash
+✅ Contract verified successfully!
+🔍 View verified contract: https://sourcify.parsec.finance/#/lookup/0x9af33524cF693c622311E6A675f29942af647166
+```
 
 ## 🔄 Adding Your Token to HyperSwap
 
